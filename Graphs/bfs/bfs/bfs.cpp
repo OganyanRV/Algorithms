@@ -51,6 +51,8 @@ void bfs (int start, vector <bool>& visited, vector<int>& dst, vector<int>& pr) 
   }
 }
 signed main() {
+  freopen("wave.in", "r", stdin);
+  freopen("wave.out", "w", stdout);
   vector<int> dst(101, -1); // массив для дистанций
   vector<int> pr(101, -1); // массив для записи путя
   int start;
@@ -68,6 +70,7 @@ signed main() {
   int j=start;
   int i=0;
   cout<<n<<endl;
+  // Вывод пути обхода
   cout<<start<< " ";
   int used=1;
   bool fl = false;
@@ -89,4 +92,45 @@ signed main() {
     if (used>=n) break;
     temp = temp1;
   }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////// Вариант 2
+
+int n, m, root;
+vector<int> G[101];
+vector<int> ans;
+vector<int> used(101, 0);
+void bfs(int root) {
+  queue<int> q;
+  used[root] = 1;
+  q.push(root);
+  while (!q.empty()) {
+    int v = q.front();
+    q.pop();
+    ans.push_back(v);
+    for (auto u : G[v]) {
+      if (!used[u]) {
+        used[u] = 1;
+        q.push(u);
+      }
+    }
+  }
+}
+
+int main() {
+  freopen("wave.in", "r", stdin);
+  freopen("wave.out", "w", stdout);
+  cin >> n >> m >> root;
+  for (int i = 0; i < m; ++i) {
+    int v, u;
+    cin >> v >> u;
+    v--, u--;
+    G[v].push_back(u);
+    G[u].push_back(v);
+  }
+  bfs(root - 1);
+  cout << ans.size() << '\n';
+  for (auto x : ans) {
+    cout << x + 1 << ' ';
+  }
+  return 0;
 }
