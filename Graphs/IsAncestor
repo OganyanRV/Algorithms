@@ -1,0 +1,93 @@
+#pragma comment(linker, "/STACK:16777216")
+#include <vector>
+#include<algorithm>
+#include <iostream>
+#include<set>
+#include <string>
+#include <math.h>
+#include <numeric>
+#include<map>
+#include<queue>
+#include <deque>
+#include<unordered_map>
+#define pll pair<ll,ll>
+#define pii pair<int,int>
+#define ll long long
+#define vi vector<int>
+#define vll vector<long long int>
+#define ve vector
+#define fi first
+#define se second
+#define rep(i,n) for(int (i)=0;(i)<(n);(i)++)
+#define pb push_back
+#define mp make_pair
+#define len(a) (int)(a).size()
+#define all(a) (a).begin(),(a).end()
+#define endl '\n'
+#define M_PI 3.14159265358979323846
+const int INF = 2 * 1e9;
+const ll MOD = 1000000007;
+//#define int long long
+using namespace std;
+
+vector<int> time_in, time_out; // "времена" захода и выхода из вершины
+vector<bool> was;
+int dfs_timer = 0; // "таймер" для определения времён
+vector<vector<int>> g;
+
+void dfs (int v) {
+    time_in[v] = ++dfs_timer;
+    for (size_t i=0; i<g[v].size(); ++i) {
+        int to = g[v][i];
+        if (!was[to])
+            dfs (to);
+    }
+    time_out[v] = ++dfs_timer;
+}
+
+bool upper (int a, int b) {
+    return time_in[a] <= time_in[b] && time_out[a] >= time_out[b];
+}
+
+void solve() {
+    int n,m;
+    cin>>n;
+    g.resize(n);
+    int start = 0;
+    for (int i=0; i<n; ++i) {
+        int q;
+        cin>>q;
+        if (q == 0 ) start = i;
+        else
+        g[q - 1].push_back(i);
+    }
+    cin>>m;
+    was.assign(n, false);
+    time_in.assign(n,0);
+    time_out.assign(n,0);
+    dfs(start);
+    rep(i,m) {
+        int a,b;
+        cin>>a>>b;
+        a--;
+        b--;
+        if (upper(a,b)) cout<<"1 ";
+        else cout<< "0 ";
+    }
+    return;
+
+
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    cout.fixed; cout.precision(12);
+
+    //freopen("ancestor.in", "r", stdin);
+    //freopen("ancestor.out", "w", stdout);
+    //int t; cin >> t; rep(i, t)
+    solve();
+    return 0;
+}
+
